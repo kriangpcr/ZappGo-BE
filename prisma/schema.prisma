@@ -1,17 +1,167 @@
 generator client {
-  provider   = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL2")
-
+  url      = env("DATABASE_URL")
 }
 
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum RestaurantStatus {
+  OPEN
+  CLOSED
+  BUSY
+  OFFLINE
+}
+
+enum MenuStatus {
+  AVAILABLE
+  OUT_OF_STOCK
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  COOKING
+  DELIVERING
+  COMPLETED
+  CANCELED
+}
+
+enum PaymentMethod {
+  PROMPTPAY
+  CREDIT_CARD
+}
+
+enum PaymentStatus {
+  SUCCESS
+  FAIL
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
 model User {
-  id         String   @id @default(uuid())
-  email      String   @unique
+  id         String    @id @default(uuid())
+  prefix     String?
+  first_name String
+  last_name  String
+  email      String    @unique
   password   String
-  role       String   @default("USER")
-  created_at DateTime @default(now())
+  phone      String?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  addresses  Address[]
+  orders     Order[]
+  cart       Cart?
+}
+
+model Address {
+  id           String   @id @default(uuid())
+  house_no     String?
+  village_moo  String?
+  lane_alley   String?
+  road         String?
+  sub_district String?
+  district     String?
+  province     String?
+  postal_code  String?
+  user_id      String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  user   User    @relation(fields: [user_id], references: [id])
+  orders Order[]
+}
+
+model Restaurant {
+  id          String           @id @default(uuid())
+  name        String           @unique
+  description String?
+  open_time   DateTime?        @db.Time
+  close_time  DateTime?        @db.Time
+  status      RestaurantStatus @default(CLOSED)
+
+  menus  Menu[]
+  orders Order[]
+}
+
+model Menu {
+  id            String     @id @default(uuid())
+  name          String
+  price         Float
+  description   String?
+  picture_id    String?
+  status        MenuStatus @default(AVAILABLE)
+  restaurant_id String
+
+  restaurant Restaurant  @relation(fields: [restaurant_id], references: [id])
+  orderItems OrderItem[]
+  cartItems  CartItem[]
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  restaurant_id String
+  user_id       String
+  address_id    String
+  status        OrderStatus @default(PENDING)
+  total_price   Float
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+
+  restaurant Restaurant  @relation(fields: [restaurant_id], references: [id])
+  user       User        @relation(fields: [user_id], references: [id])
+  address    Address     @relation(fields: [address_id], references: [id])
+  orderItems OrderItem[]
+  payment    Payment?
+}
+
+model OrderItem {
+  id              String   @id @default(uuid())
+  menu_id         String
+  order_id        String
+  restaurant_name String
+  menu_name       String
+  price           Float
+  quantity        Int
+  subtotal        Float
+  created_at      DateTime @default(now())
+
+  menu  Menu  @relation(fields: [menu_id], references: [id])
+  order Order @relation(fields: [order_id], references: [id])
+}
+
+model Cart {
+  id         String     @id @default(uuid())
+  user_id    String     @unique
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+
+  user      User       @relation(fields: [user_id], references: [id])
+  cartItems CartItem[]
+}
+
+model CartItem {
+  id       String @id @default(uuid())
+  quantity Int
+  menu_id  String
+  cart_id  String
+
+  menu Menu @relation(fields: [menu_id], references: [id])
+  cart Cart @relation(fields: [cart_id], references: [id])
+
+  @@unique([cart_id, menu_id])
+}
+
+model Payment {
+  id       String        @id @default(uuid())
+  order_id String        @unique
+  method   PaymentMethod
+  status   PaymentStatus
+  paid_at  DateTime?
+
+  order Order @relation(fields: [order_id], references: [id])
 }

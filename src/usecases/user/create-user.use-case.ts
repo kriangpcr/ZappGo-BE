@@ -14,20 +14,19 @@ export class CreateUserUseCase implements UseCase<
   },
   any
 > {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository) { }
 
   async execute(ctx: { body: CreateUserDto }): Promise<any> {
     let userwithemail = await this.userRepository.getByEmail(ctx.body.email);
     if (userwithemail) {
       return new BadRequestException('Dup email');
     }
-    let user = await this.userRepository.create(
-      new User({
-        email: ctx.body.email,
-        password: ctx.body.password,
-        role: ctx.body.role,
-      }),
-    );
-    return user;
+    // let user = await this.userRepository.create(
+    //   new User({
+    //     email: ctx.body.email,
+    //     password: ctx.body.password,
+    //   }),
+    // );
+    return "user";
   }
 }
