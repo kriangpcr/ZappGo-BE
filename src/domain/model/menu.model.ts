@@ -8,9 +8,11 @@ export interface MenuProps {
   name: string;
   price: number;
   description?: string | null;
-  picture_id?: string | null;
+  image_id?: string | null;
   status?: MenuStatus;
   restaurant_id: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export class Menu {
@@ -18,18 +20,22 @@ export class Menu {
   readonly name: string;
   readonly price: number;
   readonly description?: string | null;
-  readonly picture_id?: string | null;
+  readonly image_id?: string | null;
   readonly status: MenuStatus;
   readonly restaurant_id: string;
+  readonly created_at?: Date;
+  readonly updated_at?: Date;
 
   private constructor(props: MenuProps) {
     this.id = props.id;
     this.name = props.name;
     this.price = props.price;
     this.description = props.description ?? null;
-    this.picture_id = props.picture_id ?? null;
+    this.image_id = props.image_id ?? null;
     this.status = props.status ?? MenuStatus.AVAILABLE;
     this.restaurant_id = props.restaurant_id;
+    this.created_at = props.created_at;
+    this.updated_at = props.updated_at;
   }
 
   static create(props: Omit<MenuProps, 'id'>): Menu {

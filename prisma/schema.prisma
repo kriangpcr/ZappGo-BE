@@ -96,6 +96,8 @@ model Menu {
   image_id      String?
   status        MenuStatus @default(AVAILABLE)
   restaurant_id String
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
 
   restaurant Restaurant  @relation(fields: [restaurant_id], references: [id])
   orderItems OrderItem[]

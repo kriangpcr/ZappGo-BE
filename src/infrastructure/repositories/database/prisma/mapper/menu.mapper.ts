@@ -8,9 +8,11 @@ export class PrismaMenuMapper {
       name: menu.name,
       price: menu.price,
       description: menu.description,
-      picture_id: menu.picture_id,
+      image_id: menu.image_id,
       status: menu.status,
       restaurant_id: menu.restaurant_id,
+      created_at: menu.created_at,
+      updated_at: menu.updated_at,
     };
   }
 

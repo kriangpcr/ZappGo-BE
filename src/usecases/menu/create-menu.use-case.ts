@@ -5,7 +5,7 @@ import {
   RestaurantRepository,
 } from '@domain/repositories/database';
 import { CreateMenuDto } from '@infrastructure/dtos/menu/create-menu.dto';
-import { Menu, MenuStatus } from '@domain/model';
+import { Menu } from '@domain/model';
 @Injectable()
 export class CreateMenuUseCase implements UseCase<
   {
@@ -23,15 +23,14 @@ export class CreateMenuUseCase implements UseCase<
       ctx.body.restaurant_id,
     );
     if (!Restaurant) {
-      return new BadRequestException('Restaurant not found');
+      throw new BadRequestException('Restaurant not found');
     }
-
     const menu = await this.menuRepository.create(
       Menu.create({
         name: ctx.body.name,
         price: Number(ctx.body.price),
         restaurant_id: ctx.body.restaurant_id,
-        status: ctx.body.status as unknown as MenuStatus,
+        status: ctx.body.status,
       }),
     );
     return menu;

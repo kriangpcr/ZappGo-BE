@@ -7,6 +7,12 @@ import { AllExceptionFilter } from '@infrastructure/common/filter/exception.filt
 import { LoggerService } from '@infrastructure/logger/logger.service';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(EnvironmentConfigService);
+  const PREFIX = configService.getPrefix();
+
+  app.setGlobalPrefix(PREFIX);
+  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalFilters(new AllExceptionFilter(new LoggerService()));
   const config = new DocumentBuilder()
     .setTitle('BACKEND')
     .setDescription('The BACKEND API description')
@@ -14,12 +20,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
-
-  const configService = app.get(EnvironmentConfigService);
-
-  app.setGlobalPrefix(configService.getPrefix());
-  app.useGlobalInterceptors(new TransformInterceptor());
-  app.useGlobalFilters(new AllExceptionFilter(new LoggerService()));
   const PORT = configService.getPort();
   await app.listen(PORT ?? 3000);
 }

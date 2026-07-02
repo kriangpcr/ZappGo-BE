@@ -1,6 +1,12 @@
+import { MenuStatus } from '@domain/model';
 import { ApiProperty } from '@nestjs/swagger';
-import { MenuStatus } from '@prisma/client';
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateMenuDto {
   @ApiProperty({
@@ -14,12 +20,12 @@ export class CreateMenuDto {
 
   @ApiProperty({
     description: 'Menu price',
-    type: String,
+    type: Number,
     required: true,
   })
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  price: string;
+  price: number;
 
   @ApiProperty({
     description: 'Restaurant id',
