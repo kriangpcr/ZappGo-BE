@@ -32,9 +32,7 @@ export class Menu {
     this.restaurant_id = props.restaurant_id;
   }
 
-  static create(
-    props: Omit<MenuProps, 'id'>,
-  ): Menu {
+  static create(props: Omit<MenuProps, 'id'>): Menu {
     return new Menu(props);
   }
 

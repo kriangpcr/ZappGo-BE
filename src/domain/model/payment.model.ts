@@ -31,9 +31,7 @@ export class Payment {
     this.paid_at = props.paid_at ?? null;
   }
 
-  static create(
-    props: Omit<PaymentProps, 'id'>,
-  ): Payment {
+  static create(props: Omit<PaymentProps, 'id'>): Payment {
     return new Payment(props);
   }
 

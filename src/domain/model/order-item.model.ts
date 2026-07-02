@@ -33,9 +33,7 @@ export class OrderItem {
     this.created_at = props.created_at;
   }
 
-  static create(
-    props: Omit<OrderItemProps, 'id' | 'created_at'>,
-  ): OrderItem {
+  static create(props: Omit<OrderItemProps, 'id' | 'created_at'>): OrderItem {
     const subtotal = props.price * props.quantity;
     return new OrderItem({ ...props, subtotal });
   }

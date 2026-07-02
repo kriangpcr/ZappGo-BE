@@ -29,7 +29,6 @@ class EnvironmentVariables {
   @IsOptional()
   @IsString()
   SUPABASE_KEY: string;
-
 }
 
 export function validateEnvironmentVariables(

@@ -31,9 +31,7 @@ export class Restaurant {
     this.status = props.status ?? RestaurantStatus.CLOSED;
   }
 
-  static create(
-    props: Omit<RestaurantProps, 'id'>,
-  ): Restaurant {
+  static create(props: Omit<RestaurantProps, 'id'>): Restaurant {
     return new Restaurant(props);
   }
 

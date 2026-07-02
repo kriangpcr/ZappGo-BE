@@ -18,9 +18,7 @@ export class CartItem {
     this.cart_id = props.cart_id;
   }
 
-  static create(
-    props: Omit<CartItemProps, 'id'>,
-  ): CartItem {
+  static create(props: Omit<CartItemProps, 'id'>): CartItem {
     if (props.quantity <= 0) {
       throw new Error('CartItem quantity must be greater than 0');
     }

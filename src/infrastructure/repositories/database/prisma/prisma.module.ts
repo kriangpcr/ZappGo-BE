@@ -41,4 +41,4 @@ const prismaRepositories = [
   providers: [PrismaService, ...prismaRepositories],
   exports: [PrismaService, ...prismaRepositories],
 })
-export class PrismaModule { }
+export class PrismaModule {}
