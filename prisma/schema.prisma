@@ -93,7 +93,7 @@ model Menu {
   name          String
   price         Float
   description   String?
-  picture_id    String?
+  image_id      String?
   status        MenuStatus @default(AVAILABLE)
   restaurant_id String
 
