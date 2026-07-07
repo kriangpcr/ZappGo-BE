@@ -5,7 +5,7 @@ import { validateEnvironmentVariables } from './environment-config.validation';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `${process.cwd()}/env/${process.env.NODE_ENV}.env`,
+      // envFilePath: `${process.cwd()}/env/${process.env.NODE_ENV}.env`,
       isGlobal: true,
       validate: validateEnvironmentVariables,
     }),
