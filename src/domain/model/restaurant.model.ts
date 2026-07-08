@@ -12,6 +12,7 @@ export interface RestaurantProps {
   open_time?: Date | null;
   close_time?: Date | null;
   status?: RestaurantStatus;
+  image_id?: string | null;
 }
 
 export class Restaurant {
@@ -20,6 +21,7 @@ export class Restaurant {
   readonly description?: string | null;
   readonly open_time?: Date | null;
   readonly close_time?: Date | null;
+  readonly image_id?: string | null;
   readonly status: RestaurantStatus;
 
   private constructor(props: RestaurantProps) {
@@ -29,6 +31,7 @@ export class Restaurant {
     this.open_time = props.open_time ?? null;
     this.close_time = props.close_time ?? null;
     this.status = props.status ?? RestaurantStatus.CLOSED;
+    this.image_id = props.image_id ?? null;
   }
 
   static create(props: Omit<RestaurantProps, 'id'>): Restaurant {

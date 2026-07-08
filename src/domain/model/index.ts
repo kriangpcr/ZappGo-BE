@@ -7,3 +7,4 @@ export * from './order-item.model';
 export * from './cart.model';
 export * from './cart-item.model';
 export * from './payment.model';
+export * from './image.model';

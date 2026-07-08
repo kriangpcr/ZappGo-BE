@@ -7,3 +7,4 @@ export * from './order-item.repository';
 export * from './cart.repository';
 export * from './cart-item.repository';
 export * from './payment.repository';
+export * from './image.repository';

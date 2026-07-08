@@ -79,10 +79,12 @@ model Restaurant {
   id          String           @id @default(uuid())
   name        String           @unique
   description String?
+  image_id    String?          @unique
   open_time   DateTime?        @db.Time
   close_time  DateTime?        @db.Time
   status      RestaurantStatus @default(CLOSED)
 
+  image  Image? @relation(fields: [image_id], references: [id])
   menus  Menu[]
   orders Order[]
 }
@@ -92,12 +94,13 @@ model Menu {
   name          String
   price         Float
   description   String?
-  image_id      String?
+  image_id      String?    @unique
   status        MenuStatus @default(AVAILABLE)
   restaurant_id String
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt
 
+  image      Image? @relation(fields: [image_id], references: [id])
   restaurant Restaurant  @relation(fields: [restaurant_id], references: [id])
   orderItems OrderItem[]
   cartItems  CartItem[]
@@ -165,4 +168,18 @@ model Payment {
   paid_at  DateTime?
 
   order Order @relation(fields: [order_id], references: [id])
+}
+
+model Image {
+  id           String      @id @default(uuid())
+  file_name    String
+  bucket       String
+  mime_type    String
+  size         Int
+  path         String
+  public_url   String
+  created_at   DateTime    @default(now())
+
+  restaurant   Restaurant?
+  menu         Menu?
 }

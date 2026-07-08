@@ -10,6 +10,7 @@ export class PrismaRestaurantMapper {
       open_time: restaurant.open_time,
       close_time: restaurant.close_time,
       status: restaurant.status,
+      image_id: restaurant.image_id,
     };
   }
 
