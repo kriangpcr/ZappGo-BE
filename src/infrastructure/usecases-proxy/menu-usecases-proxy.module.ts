@@ -2,11 +2,7 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { UseCaseProxy } from './usecases-proxy';
 import { DatabaseModule } from '@infrastructure/repositories/database/database.module';
 import { EnvironmentConfigModule } from '@infrastructure/config/environment-config.module';
-import {
-  CreateMenuUseCase,
-  CreateUserUseCase,
-  GetMenuRestaurantUseCase,
-} from '@usecases/index';
+import { CreateMenuUseCase, GetMenuRestaurantUseCase } from '@usecases/index';
 import {
   MenuRepository,
   RestaurantRepository,

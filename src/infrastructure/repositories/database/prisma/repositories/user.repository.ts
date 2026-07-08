@@ -28,7 +28,7 @@ export class PrismaUserRepository
     throw new Error('Method not implemented.');
   }
   create(entity: User, tx?: PrismaTransaction): Promise<User> {
-    return this.getConnection(null)
+    return this.getConnection(tx)
       .user.create({
         data: entity,
       })

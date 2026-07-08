@@ -1,10 +1,9 @@
 export interface UserProps {
   id?: string;
   prefix?: string | null;
-  first_name: string;
-  last_name: string;
+  first_name?: string;
+  last_name?: string;
   email: string;
-  password: string;
   phone?: string | null;
   created_at?: Date;
   updated_at?: Date;
@@ -13,10 +12,9 @@ export interface UserProps {
 export class User {
   readonly id?: string;
   readonly prefix?: string | null;
-  readonly first_name: string;
-  readonly last_name: string;
+  readonly first_name?: string;
+  readonly last_name?: string;
   readonly email: string;
-  readonly password: string;
   readonly phone?: string | null;
   readonly created_at?: Date;
   readonly updated_at?: Date;
@@ -24,10 +22,9 @@ export class User {
   private constructor(props: UserProps) {
     this.id = props.id;
     this.prefix = props.prefix ?? null;
-    this.first_name = props.first_name;
-    this.last_name = props.last_name;
+    this.first_name = props.first_name ?? '';
+    this.last_name = props.last_name ?? '';
     this.email = props.email;
-    this.password = props.password;
     this.phone = props.phone ?? null;
     this.created_at = props.created_at;
     this.updated_at = props.updated_at;
@@ -36,9 +33,7 @@ export class User {
   /**
    * Factory method — สร้าง User ใหม่ (ยังไม่มี id, timestamps จะถูกกำหนดโดย DB)
    */
-  static create(
-    props: Omit<UserProps, 'id' | 'created_at' | 'updated_at'>,
-  ): User {
+  static create(props: Omit<UserProps, 'created_at' | 'updated_at'>): User {
     return new User(props);
   }
 

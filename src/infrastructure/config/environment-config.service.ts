@@ -11,4 +11,10 @@ export class EnvironmentConfigService implements EnvironmentConfig {
   getPrefix(): string {
     return this.configService.get<string>('PREFIX');
   }
+  getSupabaseUrl(): string {
+    return this.configService.get<string>('SUPABASE_URL');
+  }
+  getSupabaseKey(): string {
+    return this.configService.get<string>('SUPABASE_KEY');
+  }
 }

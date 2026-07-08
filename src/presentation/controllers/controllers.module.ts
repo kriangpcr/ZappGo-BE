@@ -1,15 +1,16 @@
-import { EnvironmentConfigModule } from '@infrastructure/config/environment-config.module';
 import { MenuUsecasesProxyModule } from '@infrastructure/usecases-proxy/menu-usecases-proxy.module';
-import { UserUsecasesProxyModule } from '@infrastructure/usecases-proxy/user-usecases-proxy.module';
 import { Module } from '@nestjs/common';
-import { UserController } from './user.controller.module';
 import { MenuController } from './menu.controller.module';
 import { MainController } from './main.controller.module';
+import { AuthUsecasesProxyModule } from '@infrastructure/usecases-proxy/auth-usecase-proxy.module';
+import { AuthController } from './auth.controller.module';
+import { GuardUsecasesProxyModule } from '@infrastructure/usecases-proxy/guard-usecase-proxy.module';
 @Module({
   imports: [
-    UserUsecasesProxyModule.register(),
     MenuUsecasesProxyModule.register(),
+    AuthUsecasesProxyModule.register(),
+    GuardUsecasesProxyModule.register(),
   ],
-  controllers: [UserController, MenuController, MainController],
+  controllers: [MenuController, MainController, AuthController],
 })
 export class ControllersModule {}
