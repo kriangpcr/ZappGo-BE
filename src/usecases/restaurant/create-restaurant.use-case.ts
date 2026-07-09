@@ -9,6 +9,7 @@ import { CreateRestaurantDto } from '@infrastructure/dtos/restaurant/create-rest
 import type { IUUIDService } from '@domain/adapters/uuid.interface';
 import { IStorageService } from '@domain/adapters/storage.abstract';
 import { SupabaseService } from '@infrastructure/services/supabase/supabase.service';
+import { PrismaService } from '@infrastructure/repositories/database/prisma/prisma.service';
 
 @Injectable()
 export class CreateRestaurantUseCase implements UseCase<
@@ -23,6 +24,7 @@ export class CreateRestaurantUseCase implements UseCase<
     private readonly supabaseService: SupabaseService,
     private readonly restaurantRepository: RestaurantRepository,
     private readonly imageRepository: ImageRepository,
+    private readonly prismaService: PrismaService,
   ) {}
 
   async execute(ctx: { body: CreateRestaurantDto }): Promise<any> {
@@ -45,30 +47,36 @@ export class CreateRestaurantUseCase implements UseCase<
         filePath,
       );
 
-      const image = await this.imageRepository.create(
-        Image.create({
-          file_name: fileName,
-          bucket: 'restaurant',
-          mime_type: ctx.body.img.mimetype,
-          size: ctx.body.img.size,
-          path: filePath,
-          public_url: publicUrl,
-        }),
-      );
+      const restaurant = await this.prismaService.$transaction(async (tx) => {
+        const image = await this.imageRepository.create(
+          Image.create({
+            file_name: fileName,
+            bucket: 'restaurant',
+            mime_type: ctx.body.img.mimetype,
+            size: ctx.body.img.size,
+            path: filePath,
+            public_url: publicUrl,
+          }),
+          tx,
+        );
 
-      const openTime = new Date(`1970-01-01T${ctx.body.open_time}Z`);
-      const closeTime = new Date(`1970-01-01T${ctx.body.close_time}Z`);
+        const openTime = new Date(`1970-01-01T${ctx.body.open_time}Z`);
+        const closeTime = new Date(`1970-01-01T${ctx.body.close_time}Z`);
 
-      const restaurant = await this.restaurantRepository.create(
-        Restaurant.create({
-          name: ctx.body.name,
-          description: ctx.body.description,
-          open_time: openTime,
-          close_time: closeTime,
-          image_id: image.id,
-          status: RestaurantStatus.CLOSED,
-        }),
-      );
+        const restaurant = await this.restaurantRepository.create(
+          Restaurant.create({
+            name: ctx.body.name,
+            description: ctx.body.description,
+            open_time: openTime,
+            close_time: closeTime,
+            image_id: image.id,
+            status: RestaurantStatus.CLOSED,
+          }),
+          tx,
+        );
+
+        return restaurant;
+      });
 
       return restaurant;
     } catch (error) {
