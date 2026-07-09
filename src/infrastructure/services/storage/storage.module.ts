@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SupabaseStorageModule } from './supabase/supabase.module';
+import { SupabaseStorageModule } from './supabase.module';
 
 @Module({
   imports: [SupabaseStorageModule],

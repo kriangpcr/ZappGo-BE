@@ -1,4 +1,4 @@
-export abstract class IGenericStorageService {
+export abstract class IStorageService {
   abstract makeBucket(bucket_name: string): Promise<void>;
   abstract listBuckets(): Promise<
     {
@@ -18,4 +18,8 @@ export abstract class IGenericStorageService {
     options?: any,
   ): Promise<any>;
   abstract removeObject(bucket_name: string, object_name: string): Promise<any>;
+  abstract getPublicUrl(
+    bucket_name: string,
+    object_name: string,
+  ): Promise<string>;
 }

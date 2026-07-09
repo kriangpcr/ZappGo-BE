@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { IGenericStorageService } from '@domain/repositories/storage';
 import { SupabaseService } from '@infrastructure/services/supabase/supabase.service';
+import { IStorageService } from '@domain/adapters/storage.abstract';
 
 @Injectable()
-export class SupabaseStorageService implements IGenericStorageService {
+export class SupabaseStorageService implements IStorageService {
   constructor(private readonly supabaseClient: SupabaseService) {}
   async makeBucket(bucket_name: string): Promise<void> {
     await this.supabaseClient.getClient().storage.createBucket(bucket_name);
@@ -58,10 +58,19 @@ export class SupabaseStorageService implements IGenericStorageService {
       });
   }
 
-  removeObject(bucket_name: string, object_name: string): Promise<any> {
+  async removeObject(bucket_name: string, object_name: string): Promise<any> {
     return this.supabaseClient
       .getClient()
       .storage.from(bucket_name)
       .remove([object_name]);
+  }
+
+  getPublicUrl(bucket_name: string, object_name: string): string {
+    const { data } = this.supabaseClient
+      .getClient()
+      .storage.from(bucket_name)
+      .getPublicUrl(object_name);
+
+    return data.publicUrl;
   }
 }
