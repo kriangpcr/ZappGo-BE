@@ -4,3 +4,5 @@ export * from './menu/get-menu-restaurant-id.use-case';
 
 export * from './auth/sign-in-password.use-case';
 export * from './auth/sign-up-password.use-case';
+
+export * from './restaurant/create-restaurant.use-case';

@@ -10,6 +10,7 @@ import type { IUUIDService } from '@domain/adapters/uuid.interface';
 import { IStorageService } from '@domain/adapters/storage.abstract';
 import { SupabaseService } from '@infrastructure/services/supabase/supabase.service';
 import { PrismaService } from '@infrastructure/repositories/database/prisma/prisma.service';
+import type { IPrismaService } from '@domain/repositories/database/prisma/prisma.interface';
 
 @Injectable()
 export class CreateRestaurantUseCase implements UseCase<
@@ -21,10 +22,9 @@ export class CreateRestaurantUseCase implements UseCase<
   constructor(
     private readonly storageService: IStorageService,
     private readonly uuidService: IUUIDService,
-    private readonly supabaseService: SupabaseService,
     private readonly restaurantRepository: RestaurantRepository,
     private readonly imageRepository: ImageRepository,
-    private readonly prismaService: PrismaService,
+    private readonly prismaService: IPrismaService,
   ) {}
 
   async execute(ctx: { body: CreateRestaurantDto }): Promise<any> {

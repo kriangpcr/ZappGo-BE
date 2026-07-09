@@ -52,10 +52,15 @@ export class CreateRestaurantDto {
   @Matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)
   close_time: string;
 
-  @IsFile({
-    message: 'This field is required',
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    required: true,
   })
+  @IsFile({ message: 'Image is required' })
   @HasMimeType(['image/jpeg', 'image/png'])
-  @MaxFileSize(10485760, { message: `Maximum file size is ` })
+  @MaxFileSize(10 * 1024 * 1024, {
+    message: 'Maximum file size is 10MB',
+  })
   img: MemoryStoredFile;
 }
