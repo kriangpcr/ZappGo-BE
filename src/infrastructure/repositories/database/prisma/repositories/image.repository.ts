@@ -1,4 +1,3 @@
-import { UserRepository } from '@domain/repositories/database/user.repository';
 import { Injectable } from '@nestjs/common';
 import { PrismaRepository } from '../prisma.repository';
 import { Image } from '@domain/model';
@@ -11,25 +10,51 @@ export class PrismaImageRepository
   extends PrismaRepository
   implements ImageRepository
 {
-  getAll(tx?: PrismaTransaction): Promise<Image[]> {
-    throw new Error('Method not implemented.');
+  async getAll(tx?: PrismaTransaction): Promise<Image[]> {
+    return this.getConnection(tx)
+      .image.findMany()
+      .then((images) => images.map(PrismaImageMapper.toDomain));
   }
-  getById(id: string | number, tx?: PrismaTransaction): Promise<Image> {
-    throw new Error('Method not implemented.');
+
+  async getById(id: string | number, tx?: PrismaTransaction): Promise<Image> {
+    return this.getConnection(tx)
+      .image.findUnique({
+        where: { id: String(id) },
+      })
+      .then(PrismaImageMapper.toDomain);
   }
-  create(entity: Image, tx?: PrismaTransaction): Promise<Image> {
-    throw new Error('Method not implemented.');
+
+  async create(entity: Image, tx?: PrismaTransaction): Promise<Image> {
+    return this.getConnection(tx)
+      .image.create({
+        data: PrismaImageMapper.toPrisma(entity),
+      })
+      .then(PrismaImageMapper.toDomain);
   }
-  createMany(
+
+  async createMany(
     entities: Image[],
     tx?: PrismaTransaction,
   ): Promise<{ count: number }> {
-    throw new Error('Method not implemented.');
+    return this.getConnection(tx).image.createMany({
+      data: entities.map(PrismaImageMapper.toPrisma),
+    });
   }
-  update(entity: Image, tx?: PrismaTransaction): Promise<Image> {
-    throw new Error('Method not implemented.');
+
+  async update(entity: Image, tx?: PrismaTransaction): Promise<Image> {
+    return this.getConnection(tx)
+      .image.update({
+        where: { id: entity.id },
+        data: PrismaImageMapper.toPrisma(entity),
+      })
+      .then(PrismaImageMapper.toDomain);
   }
-  remove(id: string | number, tx?: PrismaTransaction): Promise<Image> {
-    throw new Error('Method not implemented.');
+
+  async remove(id: string | number, tx?: PrismaTransaction): Promise<Image> {
+    return this.getConnection(tx)
+      .image.delete({
+        where: { id: String(id) },
+      })
+      .then(PrismaImageMapper.toDomain);
   }
 }

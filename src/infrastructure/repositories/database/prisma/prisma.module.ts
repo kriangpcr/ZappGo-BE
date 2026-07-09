@@ -10,6 +10,7 @@ import {
   PrismaCartRepository,
   PrismaCartItemRepository,
   PrismaPaymentRepository,
+  PrismaImageRepository,
 } from './repositories';
 import {
   UserRepository,
@@ -21,6 +22,7 @@ import {
   CartRepository,
   CartItemRepository,
   PaymentRepository,
+  ImageRepository,
 } from '@domain/repositories/database';
 import { EnvironmentConfigModule } from '@infrastructure/config/environment-config.module';
 
@@ -34,6 +36,7 @@ const prismaRepositories = [
   { provide: CartRepository, useClass: PrismaCartRepository },
   { provide: CartItemRepository, useClass: PrismaCartItemRepository },
   { provide: PaymentRepository, useClass: PrismaPaymentRepository },
+  { provide: ImageRepository, useClass: PrismaImageRepository },
 ];
 
 @Module({
