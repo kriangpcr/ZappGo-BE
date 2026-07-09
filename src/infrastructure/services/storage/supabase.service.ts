@@ -65,7 +65,10 @@ export class SupabaseStorageService implements IStorageService {
       .remove([object_name]);
   }
 
-  getPublicUrl(bucket_name: string, object_name: string): string {
+  async getPublicUrl(
+    bucket_name: string,
+    object_name: string,
+  ): Promise<string> {
     const { data } = this.supabaseClient
       .getClient()
       .storage.from(bucket_name)
