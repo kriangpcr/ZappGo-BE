@@ -1,5 +1,5 @@
 # ---------- BUILD ----------
-FROM node:20-bullseye-slim AS builder
+FROM node:22-bullseye-slim AS builder
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ RUN npm prune --production
 
 
 # ---------- PRODUCTION ----------
-FROM node:20-bullseye-slim
+FROM node:22-bullseye-slim
 
 # กำหนด NODE_ENV เพื่อให้ runtime (NestJS/Express) รันในโหมด optimize
 ENV NODE_ENV=production
@@ -32,6 +32,7 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/dist ./dist
 
+COPY --from=builder /app/prisma ./prisma
 # กำหนดสิทธิ์โฟลเดอร์ให้เป็นของ node user
 RUN chown -R node:node /app
 
